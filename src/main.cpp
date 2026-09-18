@@ -13,7 +13,7 @@ private:
     bool disponivel;
 
 public:
-    Astronauta(string cpf, string nome, int idade) {
+    Astronauta(const string& cpf, const string& nome, int idade) {
         this->cpf = cpf;
         this->nome = nome;
         this->idade = idade;
@@ -21,11 +21,11 @@ public:
         disponivel = true;
     }
 
-    string getCpf() { return cpf; }
-    string getNome() { return nome; }
-    int getIdade() { return idade; }
-    bool estaVivo() { return vivo; }
-    bool estaDisponivel() { return disponivel; }
+    const string& getCpf() const { return cpf; }
+    const string& getNome() const { return nome; }
+    int getIdade() const { return idade; }
+    bool estaVivo() const { return vivo; }
+    bool estaDisponivel() const { return disponivel; }
 
     void embarcar() { disponivel = false; }
     void desembarcar() { disponivel = true; }
@@ -47,24 +47,24 @@ public:
         estado = "planejado";
     }
 
-    int getCodigo() { return codigo; }
-    string getEstado() { return estado; }
-    bool estaPlanejado() { return estado == "planejado"; }
-    int getQuantidadeAstronautas() { return cpfs.size(); }
-    string getCpf(int posicao) { return cpfs[posicao]; }
+    int getCodigo() const { return codigo; }
+    const string& getEstado() const { return estado; }
+    bool estaPlanejado() const { return estado == "planejado"; }
+    int getQuantidadeAstronautas() const { return cpfs.size(); }
+    const string& getCpf(int posicao) const { return cpfs[posicao]; }
 
-    bool temAstronauta(string cpf) {
+    bool temAstronauta(const string& cpf) const {
         for (size_t i = 0; i < cpfs.size(); i++) {
             if (cpfs[i] == cpf) return true;
         }
         return false;
     }
 
-    void adicionarAstronauta(string cpf) {
+    void adicionarAstronauta(const string& cpf) {
         cpfs.push_back(cpf);
     }
 
-    bool removerAstronauta(string cpf) {
+    bool removerAstronauta(const string& cpf) {
         for (size_t i = 0; i < cpfs.size(); i++) {
             if (cpfs[i] == cpf) {
                 cpfs.erase(cpfs.begin() + i);
@@ -84,7 +84,7 @@ private:
     vector<Astronauta> astronautas;
     vector<Voo> voos;
 
-    int buscarAstronauta(string cpf) {
+    int buscarAstronauta(const string& cpf) const {
         for (size_t i = 0; i < astronautas.size(); i++) {
             if (astronautas[i].getCpf() == cpf) return i;
         }
@@ -99,7 +99,7 @@ private:
     }
 
 public:
-    void cadastrarAstronauta(string cpf, string nome, int idade) {
+    void cadastrarAstronauta(const string& cpf, const string& nome, int idade) {
         if (buscarAstronauta(cpf) != -1) {
             cout << "ERRO: astronauta com CPF " << cpf << " ja cadastrado" << endl;
             return;
@@ -119,7 +119,7 @@ public:
         cout << "OK: voo " << codigo << " cadastrado" << endl;
     }
 
-    void adicionarAstronauta(string cpf, int codigo) {
+    void adicionarAstronauta(const string& cpf, int codigo) {
         int posA = buscarAstronauta(cpf);
         int posV = buscarVoo(codigo);
 
@@ -148,7 +148,7 @@ public:
         cout << "OK: astronauta " << cpf << " adicionado ao voo " << codigo << endl;
     }
 
-    void removerAstronauta(string cpf, int codigo) {
+    void removerAstronauta(const string& cpf, int codigo) {
         int posA = buscarAstronauta(cpf);
         int posV = buscarVoo(codigo);
 
@@ -257,7 +257,7 @@ public:
         cout << "OK: voo " << codigo << " explodiu" << endl;
     }
 
-    void listarMortos() {
+    void listarMortos() const {
         cout << "ASTRONAUTAS MORTOS" << endl;
         bool encontrou = false;
 
@@ -286,7 +286,7 @@ public:
         }
     }
 
-    void listarVoos() {
+    void listarVoos() const {
         cout << "LISTA DE VOOS" << endl;
         string estados[4] = {
             "planejado",
