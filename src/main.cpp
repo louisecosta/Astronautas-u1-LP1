@@ -479,6 +479,70 @@ public:
         voos = novosVoos;
         cout << "OK: dados carregados de " << arquivo << endl;
     }
+
+    void relatorio() const {
+        int planejados = 0;
+        int emCurso = 0;
+        int sucesso = 0;
+        int explosao = 0;
+
+        for (size_t i = 0; i < voos.size(); i++) {
+            if (voos[i].getEstado() == "planejado") {
+                planejados++;
+            } else if (voos[i].getEstado() == "em curso") {
+                emCurso++;
+            } else if (voos[i].getEstado() == "finalizado com sucesso") {
+                sucesso++;
+            } else if (voos[i].getEstado() == "finalizado com explosao") {
+                explosao++;
+            }
+        }
+
+        int vivos = 0;
+        for (size_t i = 0; i < astronautas.size(); i++) {
+            if (astronautas[i].estaVivo()) vivos++;
+        }
+
+        int melhorExperiencia = 0;
+        int posicMelhor = -1;
+        for (size_t i = 0; i < astronautas.size(); i++) {
+            int experiencia = 0;
+            for (size_t j = 0; j < voos.size(); j++) {
+                if (voos[j].temAstronauta(astronautas[i].getCpf()) && !voos[j].estaPlanejado()) {
+                    experiencia++;
+                }
+            }
+            if (experiencia > melhorExperiencia) {
+                melhorExperiencia = experiencia;
+                posicMelhor = i;
+            }
+        }
+
+        int finalizados = sucesso + explosao;
+
+        cout << "RELATORIO" << endl;
+        cout << "voos planejados: " << planejados << endl;
+        cout << "voos em curso: " << emCurso << endl;
+        cout << "voos finalizados com sucesso: " << sucesso << endl;
+        cout << "voos finalizados com explosao: " << explosao << endl;
+        cout << "astronautas cadastrados: " << astronautas.size() << endl;
+        cout << "astronautas vivos: " << vivos << endl;
+        cout << "astronautas mortos: " << astronautas.size() - vivos << endl;
+
+        if (posicMelhor == -1) {
+            cout << "astronauta mais experiente: (nenhum)" << endl;
+        } else {
+            cout << "astronauta mais experiente: " << astronautas[posicMelhor].getCpf() << " "
+                 << astronautas[posicMelhor].getNome()
+                 << " (voos lancados: " << melhorExperiencia << ")" << endl;
+        }
+
+        if (finalizados == 0) {
+            cout << "taxa de sucesso: (nenhum voo finalizado)" << endl;
+        } else {
+            cout << "taxa de sucesso: " << (sucesso * 100) / finalizados << "%" << endl;
+        }
+    }
 };
 
 int main() {
@@ -538,6 +602,8 @@ int main() {
             string arquivo;
             cin >> arquivo;
             agencia.carregar(arquivo);
+        } else if (comando == "RELATORIO") {
+            agencia.relatorio();
         } else {
             cout << "ERRO: comando desconhecido " << comando << endl;
         }
