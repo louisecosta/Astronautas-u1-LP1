@@ -44,11 +44,15 @@ private:
     int codigo;
     string estado;
     vector<string> cpfs;
+    int quantidadeDuracao;
+    string unidadeDuracao;
 
 public:
     Voo(int codigo) {
         this->codigo = codigo;
         estado = "planejado";
+        quantidadeDuracao = 0;
+        unidadeDuracao = "";
     }
 
     int getCodigo() const { return codigo; }
@@ -56,6 +60,9 @@ public:
     bool estaPlanejado() const { return estado == "planejado"; }
     int getQuantidadeAstronautas() const { return cpfs.size(); }
     const string& getCpf(int posicao) const { return cpfs[posicao]; }
+    int getQuantidadeDuracao() const { return quantidadeDuracao; }
+    const string& getUnidadeDuracao() const { return unidadeDuracao; }
+    bool temDuracao() const { return quantidadeDuracao > 0; }
 
     bool temAstronauta(const string& cpf) const {
         for (size_t i = 0; i < cpfs.size(); i++) {
@@ -76,6 +83,11 @@ public:
             }
         }
         return false;
+    }
+
+    void definirDuracao(int quantidade, const string& unidade) {
+        quantidadeDuracao = quantidade;
+        unidadeDuracao = unidade;
     }
 
     void lancar() { estado = "em curso"; }
@@ -177,6 +189,27 @@ public:
 
         voos[posV].removerAstronauta(cpf);
         cout << "OK: astronauta " << cpf << " removido do voo " << codigo << endl;
+    }
+
+    void definirDuracao(int codigo, int quantidade, const string& unidade) {
+        int posV = buscarVoo(codigo);
+
+        if (posV == -1) {
+            cout << "ERRO: voo " << codigo << " nao cadastrado" << endl;
+            return;
+        }
+        if (quantidade <= 0) {
+            cout << "ERRO: duracao deve ser maior que zero" << endl;
+            return;
+        }
+        if (unidade != "dias" && unidade != "meses" && unidade != "anos") {
+            cout << "ERRO: unidade invalida (use dias, meses ou anos)" << endl;
+            return;
+        }
+
+        voos[posV].definirDuracao(quantidade, unidade);
+        cout << "OK: duracao do voo " << codigo << " definida para "
+             << quantidade << " " << unidade << endl;
     }
 
     void lancarVoo(int codigo) {
@@ -308,7 +341,12 @@ public:
             for (size_t i = 0; i < voos.size(); i++) {
                 if (voos[i].getEstado() == estados[e]) {
                     encontrou = true;
-                    cout << "Voo " << voos[i].getCodigo() << ": ";
+                    cout << "Voo " << voos[i].getCodigo();
+                    if (voos[i].temDuracao()) {
+                        cout << " (duracao: " << voos[i].getQuantidadeDuracao()
+                             << " " << voos[i].getUnidadeDuracao() << ")";
+                    }
+                    cout << ": ";
 
                     if (voos[i].getQuantidadeAstronautas() == 0) {
                         cout << "sem astronautas";
@@ -425,6 +463,12 @@ public:
             for (int j = 0; j < voos[i].getQuantidadeAstronautas(); j++) {
                 saida << " " << voos[i].getCpf(j);
             }
+            if (voos[i].temDuracao()) {
+                saida << " " << voos[i].getQuantidadeDuracao()
+                      << " " << voos[i].getUnidadeDuracao();
+            } else {
+                saida << " 0 -";
+            }
             saida << " " << voos[i].getEstado() << endl;
         }
 
@@ -467,6 +511,14 @@ public:
                 string cpf;
                 entrada >> cpf;
                 voo.adicionarAstronauta(cpf);
+            }
+
+            int quantidadeDuracao;
+            string unidadeDuracao;
+            entrada >> quantidadeDuracao >> unidadeDuracao;
+
+            if (quantidadeDuracao > 0) {
+                voo.definirDuracao(quantidadeDuracao, unidadeDuracao);
             }
 
             string estado;
@@ -584,6 +636,11 @@ int main() {
             int codigo;
             cin >> codigo;
             agencia.finalizarVoo(codigo);
+        } else if (comando == "DEFINIR_DURACAO") {
+            int codigo, quantidade;
+            string unidade;
+            cin >> codigo >> quantidade >> unidade;
+            agencia.definirDuracao(codigo, quantidade, unidade);
         } else if (comando == "LISTAR_VOOS") {
             agencia.listarVoos();
         } else if (comando == "LISTAR_MORTOS") {
