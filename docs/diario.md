@@ -33,9 +33,9 @@
 ## Primeiro contato: revisão sem editar
 
 - **As três melhorias que a IA sugeriu, em uma linha cada:**
-  1. Substituir strings de estado por `enum class`.
-  2. Retornar strings por `const&` e marcar getters com `const`.
-  3. Centralizar as validações repetidas da agência.
+  - Substituir strings de estado por `enum class`.
+  - Retornar strings por `const&` e marcar getters com `const`.
+  - Centralizar as validações repetidas da agência.
 
 - **A que escolhi e por quê:** 
   Escolhi a melhoria 2, por ser mais fácil e segura de implementar. Altera apenas a assinatura dos métodos sem mexer na lógica ou na saída do programa, garantindo que não vão ter erros nos testes.
@@ -85,10 +85,15 @@
 - **Primeira mensagem:**
 
 > "Este programa em C++11 controla astronautas e voos de uma agência espacial. Ele lê comandos da entrada padrão. As classes Astronauta, Voo e Agencia estão no código. Os testes da Parte 1 e da Missão 1 passam.
+> 
 > Quero dois comandos novos: SALVAR nome_do_arquivo e CARREGAR nome_do_arquivo.
+> 
 > SALVAR nome_do_arquivo grava todos os dados em um arquivo de texto e imprime: OK: dados salvos em nome_do_arquivo Se não conseguir abrir o arquivo para escrita: ERRO: nao foi possivel salvar em nome_do_arquivo
+> 
 > CARREGAR nome_do_arquivo substitui todos os dados atuais pelos do arquivo e imprime: OK: dados carregados de nome_do_arquivo Se o arquivo não existir: ERRO: nao foi possivel carregar de nome_do_arquivo (e os dados atuais continuam como estavam).
+> 
 > O formato do arquivo de texto fica a seu critério, desde que permita reconstruir totalmente o estado dos astronautas (vivo/disponível) e dos voos (estado e lista de CPFs).
+> 
 > Não mude nenhum comando que já existe nem a saída deles. Não use nada fora da biblioteca padrão. Vou conferir com bash testes/testar.sh missao2 e depois com bash testes/testar.sh parte1.."
 
 - **O plano, resumido:**
@@ -111,15 +116,19 @@ Não precisei refazer.
 ### Missão 3: RELATORIO
 - **Primeira mensagem:**
 
->"Este programa em C++11 controla astronautas e voos de uma agência espacial. Ele lê comandos da entrada padrão. As classes estão no código e os testes anteriores passam. Quero um comando novo: RELATORIO. Ele deve imprimir a linha RELATORIO seguida de nove linhas com o estado atual do sistema, exatamente neste formato:
+> "Este programa em C++11 controla astronautas e voos de uma agência espacial. Ele lê comandos da entrada padrão. As classes estão no código e os testes anteriores passam. Quero um comando novo: RELATORIO. Ele deve imprimir a linha RELATORIO seguida de nove linhas com o estado atual do sistema, exatamente neste formato:
 >
->[exemplo de saída no formato]
->Regras:
->A experiência de um astronauta é o número de voos já lançados em que ele estava a bordo (voo planejado não conta; astronauta morto continua contando). Em caso de empate, vale o cadastrado primeiro. Se ninguém voou: astronauta mais experiente: (nenhum).
->Taxa de sucesso é a parte inteira de (sucessos * 100) / finalizados, onde finalizados = com sucesso + com explosão. Sem voos finalizados: taxa de sucesso: (nenhum voo finalizado).
->Atenção: Garanta que os dados carregados do arquivo (da Missão 2) reconstruam a experiência corretamente para que o relatório permaneça consistente após o CARREGAR.
->Não mude nenhum comando existente. Não use nada fora da biblioteca padrão C++11. Vou conferir com bash testes/testar.sh missao3 e bash testes/testar.sh parte1."
 >
+> [exemplo de saída no formato]
+> Regras:
+> A experiência de um astronauta é o número de voos já lançados em que ele estava a bordo (voo planejado não conta; astronauta morto continua contando). Em caso de empate, vale o cadastrado primeiro. Se ninguém voou: astronauta mais experiente: (nenhum).
+>
+> Taxa de sucesso é a parte inteira de (sucessos * 100) / finalizados, onde finalizados = com sucesso + com explosão. Sem voos finalizados: taxa de sucesso: (nenhum voo finalizado).
+>
+> Atenção: Garanta que os dados carregados do arquivo (da Missão 2) reconstruam a experiência corretamente para que o relatório permaneça consistente após o CARREGAR.
+>
+> Não mude nenhum comando existente. Não use nada fora da biblioteca padrão C++11. Vou conferir com bash testes/testar.sh missao3 e bash testes/testar.sh parte1."
+
 - **O plano, resumido:**
   Criar o método relatorio() na classe Agencia para calcular os contadores de voos em cada estado, o número de astronautas vivos/mortos, identificar o astronauta com maior participação em voos lançados e calcular a taxa de sucesso inteira.
 
@@ -141,17 +150,26 @@ Não precisei refazer.
   Estrutura do arquivo de teste: testes/missao4
 
 - **Primeira mensagem:**
->"Este programa em C++11 controla astronautas e voos de uma agência espacial. As classes estão no código e todos os testes anteriores passam. Quero implementar a seguinte funcionalidade nova para a Missão 4 sem alterar nenhuma regra ou mensagem dos comandos existentes: o comando DEFINIR_DURACAO codigo quantidade unidade.
->Regras:
->O comando recebe o codigo do voo (inteiro), a quantidade (inteiro) e a unidade (string: "dias", "meses" ou "anos").
->Se o voo não existir: ERRO: voo codigo nao cadastrado
->Se a quantidade for menor ou igual a 0: ERRO: duracao deve ser maior que zero
->Se a unidade for diferente de "dias", "meses" ou "anos": ERRO: unidade invalida (use dias, meses ou anos)
->Se o voo existir e os dados forem válidos, registra a duração e imprime: OK: duracao do voo codigo definida para X unidade (Exemplo:
+> "Este programa em C++11 controla astronautas e voos de uma agência espacial. As classes estão no código e todos os testes anteriores passam. Quero implementar a seguinte funcionalidade nova para a Missão 4 sem alterar nenhuma regra ou mensagem dos comandos existentes: o comando DEFINIR_DURACAO codigo quantidade unidade.
+>
+> Regras:
+>
+> O comando recebe o codigo do voo (inteiro), a quantidade (inteiro) e a unidade (string: "dias", "meses" ou "anos").
+> 
+> Se o voo não existir: ERRO: voo codigo nao cadastrado
+>
+> Se a quantidade for menor ou igual a 0: ERRO: duracao deve ser maior que zero
+>
+> Se a unidade for diferente de "dias", "meses" ou "anos": ERRO: unidade invalida (use dias, meses ou anos)
+>
+> Se o voo existir e os dados forem válidos, registra a duração e imprime: OK: duracao do voo codigo definida para X unidade (Exemplo:
 >OK: duracao do voo 10 definida para 6 meses)
->Exibição: Atualize apenas o comando LISTAR_VOOS para que, se o voo tiver uma duração definida, ele exiba (duracao: X unidade) logo após o código do voo. Se o voo não tiver duração definida, a exibição do LISTAR_VOOS deve continuar exatamente igual ao que é hoje, para não impactar os cenários padrão.
->Atenção:
->Não altere o funcionamento nem as mensagens de erro de nenhum outro comando existente.
+>
+> Exibição: Atualize apenas o comando LISTAR_VOOS para que, se o voo tiver uma duração definida, ele exiba (duracao: X unidade) logo após o código do voo. Se o voo não tiver duração definida, a exibição do LISTAR_VOOS deve continuar exatamente igual ao que é hoje, para não impactar os cenários padrão.
+>
+> Atenção:
+>
+> Não altere o funcionamento nem as mensagens de erro de nenhum outro comando existente.
 >Garanta que a duração seja salva e carregada corretamente pelos comandos SALVAR e CARREGAR.
 >Mantenha o código estritamente dentro da biblioteca padrão C++11."
 
